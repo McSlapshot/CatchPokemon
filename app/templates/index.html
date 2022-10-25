@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Welcome to PokeGram</h1>
+{% if current_user.is_authenticated %}
+<h5>Edit Team</h5>
+{% for u in users %}
+{% if u.username == current_user.username %}
+<li class="list-group-item">{{ u.username }}
+    <button class="btn btn-primary" href="{{ url_for('pokedex.addTeam', user_id=u.id) }}">Add to Team</button>
+    <button class="btn btn-danger" href="{{ url_for('pokedex.removeTeam', user_id=u.id) }}">Remove From Team</button>
+</li>
+{% elif u.flag == True %}
+
+
+
+{% else %}
+
+<li class="list-group-item">{{ u.username }}</li>
+<button class ='btn btn-primary'>Battle</button>
+{% endif %}
+
+{% endfor %}
+{% else %}
+<P>Login or Sign Up Above!</P>
+{% endif %}
+{% if current_user.is_authenticated %}
+
+<p>Get to Training!</p>
+
+{% else %}
+
+
+{% endif %}
+{% endblock %}
