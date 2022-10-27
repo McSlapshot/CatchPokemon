@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 style="color: red">Battle Arena</h1>
+
+{% if current_user.is_authenticated %}
+<h5 style="color: red">Check Out Everyone's Team!</h5>
+{% for name, team in team_set.items() %}
+{% if name == current_user.username %}
+<h6 style="color:red;">Your Team</h6>
+<div class="container-fluid">
+    <li class="list-group-item">{{ name.title() }}
+        {% for p in team %}
+        <div class="row">
+            <div class="card">
+        <div class="card" style="width: 10rem;">
+            <img src="{{ p.img_url }}" class="card-img-top" alt="{{ p.name }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ p.name.title() }}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Base Experience: {{ p.base_exp }}</li>
+              <li class="list-group-item">HP: {{ p.hp }}</li>
+              <li class="list-group-item">Attack: {{ p.attack }}</li>
+              <li class="list-group-item">Defense: {{ p.defense }}</li>
+              <li class="list-group-item">Speed: {{ p.speed }}</li>
+              <li class="list-group-item">Ability: {{ p.ability.upper() }}</li>
+            </ul>
+          </div>
+        </div>
+    </div>
+        {% endfor %}
+    </li>
+    </div>    
+
+
+
+{% else %}
+<h5 style="color: red">Opponents Team </h5>
+<a type="button" class="btn btn-danger" href="{{ url_for('battleResults') }}">Battle!</a>   
+<div class="container-fluid">
+    <li class="list-group-item">{{ name.title() }}
+        {% for p in team %}
+        <div class="row">
+            <div class="card">
+        <div class="card" style="width: 10rem;">
+            <img src="{{ p.img_url }}" class="card-img-top" alt="{{ p.name }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ p.name.title() }}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Base Experience: {{ p.base_exp }}</li>
+              <li class="list-group-item">HP: {{ p.hp }}</li>
+              <li class="list-group-item">Attack: {{ p.attack }}</li>
+              <li class="list-group-item">Defense: {{ p.defense }}</li>
+              <li class="list-group-item">Speed: {{ p.speed }}</li>
+              <li class="list-group-item">Ability: {{ p.ability.upper() }}</li>
+            </ul>
+          </div>
+        </div>
+    </div>
+    {% endfor %} 
+
+
+
+{% endif %}
+
+{% endfor %}
+{% else %}
+<P>Login or Sign Up Above!</P>
+{% endif %}
+
+<a style="color: red" href="/">Go Home</a>
+
+{% endblock %}

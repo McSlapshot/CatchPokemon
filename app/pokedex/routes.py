@@ -87,12 +87,3 @@ def removeTeam(pokemon_id):
 
     return redirect(url_for('homePage'))
 
-# unsure how to go about the pokemon battle but trying things out
-# @pokedex.route('/battle')
-# @login_required
-# def battle(pokemon, user):
-#     for pokemon in team:
-#         if pokemon.attack > Opp_Pokemon.defense:
-#             pokemon.attack - Opp_Pokemon.HP
-#         if Opp_Pokemon.HP <= 0:
-#             flash('your team wins!')
