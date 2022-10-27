@@ -65,8 +65,8 @@ def addTeam(pokemon_id):
     pokemon = Pokemon.query.get(pokemon_id)
     if pokemon:
         # print(current_user.pokemon_team.count())
-        if current_user.trainer.count() > 5:
-            flash('team full')
+        if current_user.my_team.count() == 5:
+            flash('team full', 'danger')
         else:
             current_user.addToTeam(pokemon)
             flash(f'Successfully added {pokemon.name} to {current_user.username}\'s team', 'success')
@@ -87,7 +87,7 @@ def removeTeam(pokemon_id):
 
     return redirect(url_for('homePage'))
 
-#unsure how to go about the pokemon battle but trying things out
+# unsure how to go about the pokemon battle but trying things out
 # @pokedex.route('/battle')
 # @login_required
 # def battle(pokemon, user):

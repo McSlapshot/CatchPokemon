@@ -1,32 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1 style="color: red">Welcome to PokeGram</h1>
-{% if current_user.is_authenticated %}
-<h5 style="color: red">My Team</h5>
-{% for u in users %} 
-{% if u.username == current_user.username %}
-<li class="list-group-item">{{ u.username }}</li>
-<div class="card text-start">
-  <img class="card-img-top" src="holder.js/100px180/" alt="Title">
-  <div class="card-body">
-    <h4 class="card-title">opponents pokemon cards</h4>
-    <p class="card-text">Body</p>
-  </div>
-</div>
 
-{% elif u.flag == True %}
+
+
+{% if current_user.is_authenticated %}
+<h5 style="color: red">Check Out Everyone's Team!</h5>
+{% for name, team in team_set.items() %}
+{% if name == current_user.username %}
+<h6 style="color:red;">Your Team</h6>
+<li class="list-group-item">{{ name.title() }}
+    {% for p in team %}
+    <img src="{{ p.img_url }}" alt="">
+    {% endfor %}
+    <a class="btn btn-primary" href="/pokedex">Edit Team</a>
+</li>
+
 
 
 {% else %}
+<h5 style="color: red">Opponents Team</h5>
+<li class="list-group-item">{{ name.title() }}
+    {% for p in team %}
+    <img src="{{ p.img_url }}" >
+    {% endfor %}
+    <a class="btn btn-danger"  href="/battle">BATTLE!</a></li>
 
-<li class="list-group-item">{{ u.username }}</li>
-<div class="card text-start">
-  <img class="card-img-top" src="holder.js/100px180/" alt="Title">
-  <div class="card-body">
-    <h4 class="card-title">pokemon cards go here</h4>
-    <p class="card-text">Body</p>
-  </div>
-</div>
 
 
 {% endif %}
@@ -43,4 +42,5 @@
 
 
 {% endif %}
+
 {% endblock %}
