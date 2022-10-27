@@ -68,8 +68,19 @@ def updatePost(post_id):
 @login_required
 def deletePost(post_id):
     post = Post.query.get(post_id)
-    if current_user.id == post.user_id:
+    if current_user.id == post.user.id:
         post.deleteFromDB()  
     else:
         flash('You cannot delete this post...', 'danger')
     return redirect(url_for('pokegram.viewPosts'))
+
+# @pokegram.route("api/posts/<int:post_id>")
+# def getSinglePostAPI():
+
+#     posts = Post.query.all()
+#     new_posts = [p.to_dict() for p in posts]
+#     return{
+#         'status' : 'ok',
+#         'data' : new_posts,
+#         'total results'
+#     }

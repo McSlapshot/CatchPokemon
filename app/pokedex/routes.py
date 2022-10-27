@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
-from flask_login import login_required, current_user
-from app.models  import Pokemon, User, team
+from flask_login import login_fresh, login_required, current_user
+from app.models  import Pokemon, Pokedex
 from .forms import CreatePostForm
 import requests, json
 
@@ -59,34 +59,40 @@ def viewPokemon():
     pokemons = Pokemon.query.order_by(Pokemon.name).all()[::-1]
     return render_template('pokedex.html', pokemons=pokemons)
 
-
-
-
-@pokedex.route('/add_to_team/<int:user_id>')
+@pokedex.route('/add_to_team/<int:pokemon_id>')
 @login_required
-def addTeam(user_id, pokemon_id):
-    user = User.query.get(user_id)
+def addTeam(pokemon_id):
     pokemon = Pokemon.query.get(pokemon_id)
     if pokemon:
-        pokemon.addToTeam(user_id)
-        flash(f'Successfully added {pokemon.name} to {user.username}\'s team', 'success')
+        # print(current_user.pokemon_team.count())
+        if current_user.trainer.count() > 5:
+            flash('team full')
+        else:
+            current_user.addToTeam(pokemon)
+            flash(f'Successfully added {pokemon.name} to {current_user.username}\'s team', 'success')
     else:
         flash(f'Cannot add pokemon that does not exist...', 'danger')
     return redirect(url_for('homePage'))
 
-
-
-
-
-@pokedex.route('/remove_from_team/<int:user_id>')
+@pokedex.route('/remove_from_team/<int:pokemon_id>')
 @login_required
-def removeTeam(user_id, pokemon_id):
-    user = User.query.get(user_id)
+def removeTeam(pokemon_id):
     pokemon = Pokemon.query.get(pokemon_id)
     if pokemon:
-        pokemon.removeFromTeam(user)
-        flash(f'Successfully removed {pokemon.name} from {user.username}\'s team', 'success')
+        p = Pokedex.query.filter_by(pokemon_id=pokemon.id).first()
+        current_user.removeFromTeam(p)
+        flash(f'Successfully removed {pokemon.name} from {current_user.username}\'s team', 'success')
     else:
         flash(f'Cannot remove pokemon that does not exist...', 'danger')
 
     return redirect(url_for('homePage'))
+
+#unsure how to go about the pokemon battle but trying things out
+# @pokedex.route('/battle')
+# @login_required
+# def battle(pokemon, user):
+#     for pokemon in team:
+#         if pokemon.attack > Opp_Pokemon.defense:
+#             pokemon.attack - Opp_Pokemon.HP
+#         if Opp_Pokemon.HP <= 0:
+#             flash('your team wins!')

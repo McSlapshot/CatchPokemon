@@ -20,8 +20,8 @@
 
   
   <div class="card-body">
-    <a href="#" class="btn btn-primary">Add to Team</a>
-    <a href="#" class="btn btn-danger">Remove from Team</a>
+    <a href="{{ url_for('pokedex.addTeam', pokemon_id=pokemon.id) }}" class="btn btn-primary">Add to Team</a>
+    <a href="{{ url_for('pokedex.removeTeam', pokemon_id=pokemon.id) }}" class="btn btn-danger">Remove from Team</a>
   </div>
 </div>
 

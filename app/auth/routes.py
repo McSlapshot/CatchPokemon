@@ -65,9 +65,9 @@ def logMeOut():
     return redirect(url_for('homePage'))
 
 @auth.route('/user')
+@login_required
 def viewUser():
-    user = User.query.order_by(User.username).all()[::-1]
-    return render_template('user.html', user=user)
+    return render_template('user.html')
 
 @auth.route('/user/<int:post_id>')
 def viewUserInfo(user_id):
@@ -79,11 +79,11 @@ def viewUserInfo(user_id):
     else:
         return redirect(url_for('auth.viewUserInfo'))
 
-@auth.route('/user/<int:post_id>/update', methods=["GET", "POST"])
+@auth.route('/user/<int:user_id>/update', methods=["GET", "POST"])
 @login_required
 def updateUser(user_id):
     user = User.query.get(user_id)
-    if current_user.id != user.user_id:
+    if current_user.id != user.id:
         flash('You cannot update this user...', 'danger')
         return redirect(url_for('auth.viewUserInfo'))
 
@@ -109,12 +109,13 @@ def updateUser(user_id):
 
     return render_template('update_user.html', form=form, user=user)
 
-@auth.route('/posts/<int:post_id>/delete', methods=["GET"])
+@auth.route('/posts/<int:user_id>/delete', methods=["GET"])
 @login_required
 def deleteUser(user_id):
     user = User.query.get(user_id)
-    if current_user.id == user.user_id:
+    if current_user.id == user.id:
+        logout_user()
         user.deleteFromDB()  
     else:
         flash('You cannot delete this post...', 'danger')
-    return redirect(url_for('auth.viewUserInfo'))
+    return redirect(url_for('auth.logMeIn'))
